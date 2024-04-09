@@ -1,0 +1,527 @@
+Vijaya lakshmi mam Webdriver utilities
+
+package com.GenericUtilities;
+
+import java.awt.AWTException;
+import java.awt.Robot;
+import java.awt.event.KeyEvent;
+import java.io.File;
+import java.time.Duration;
+import java.util.Iterator;
+import java.util.Set;
+
+import org.apache.commons.io.FileUtils;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.Point;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+
+
+
+public class WebDriverUtility {
+
+	/**
+	 * This method is used to maximize window
+	 * @param driver
+	 */
+	public void maximizeWindow(WebDriver driver)
+	{
+		driver.manage().window().maximize();
+	}
+	
+	/**
+	 * This method is used to wait until page  get loaded
+	 * @param driver
+	 * @param sec
+	 */
+	public void waitForPageLoad(WebDriver driver, int sec)
+	{
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(sec));
+	}
+	
+	
+	public WebDriverWait webDriverWaitObj(WebDriver driver, int sec)
+	{
+		WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(sec));
+		return wait;
+	}
+	
+	public void waitUntiEleTRoBeVisible(WebDriver driver, int sec, WebElement element)
+	{
+		
+		webDriverWaitObj(driver, sec).until(ExpectedConditions.visibilityOf(element));
+	}
+	
+	public void waitUntilEleToBeClickable(WebDriver driver, int sec, WebElement element)
+	{
+		webDriverWaitObj(driver, sec).until(ExpectedConditions.elementToBeClickable(element));
+	}
+	
+	public void waitUntilTogetTitle(WebDriver driver, int sec, String title)
+	{
+		webDriverWaitObj(driver, sec).until(ExpectedConditions.titleContains(title));
+	}
+	
+	public void waitUntilAlertToBEPresent(WebDriver driver, int sec)
+	{
+		webDriverWaitObj(driver, sec).until(ExpectedConditions.alertIsPresent());
+	}
+	
+	public Select dropdownObject(WebElement element)
+	{
+		Select sel = new Select(element);
+		return sel;
+	}
+		public void handleDropdown(WebElement element, String text)
+		{
+			
+			dropdownObject(element).selectByVisibleText(text);
+		}
+		
+		public void handleDropdown (WebElement element, int index)
+		{
+			
+			dropdownObject(element).selectByIndex(index);
+		}
+		
+		public void handleDropdown (String value, WebElement element)
+		{
+			Select sel = new Select(element);
+			sel.selectByValue(value);
+		}
+		
+		public void mousehover(WebDriver driver, WebElement element)
+		{
+			Actions act = new Actions(driver);
+			act.click(element).perform();
+		}
+		
+		
+		public Actions performActions(WebDriver driver)
+		{
+			Actions act = new Actions(driver);
+			return act;
+		}
+		
+		
+		public void dragAndDrop(WebDriver driver, WebElement src, WebElement dst)
+		{
+			
+			performActions(driver).dragAndDrop(src, dst);
+		}
+		
+		public void dropAndDrop(WebDriver driver, WebElement element, int x, int y)
+		{
+			
+			performActions(driver).dragAndDropBy(element, x, y);
+		}
+		
+		public void doubleClick(WebDriver driver)
+		{
+			performActions(driver).doubleClick().perform();
+		}
+		
+		public void doubleClick(WebDriver driver, WebElement element)
+		{
+			performActions(driver).doubleClick(element).perform();
+		}
+		
+		public void rightClick(WebDriver driver)
+		{
+			performActions(driver).contextClick().perform();
+		}
+		
+		public void rightClick(WebDriver driver, WebElement element)
+		{
+			performActions(driver).contextClick(element).perform();
+		}
+		
+		/**
+		 * This method will Press Enter Key
+		 * @param driver
+		 */
+		public void enterKeyPress(WebDriver driver)
+		{
+			performActions(driver).sendKeys(Keys.ENTER).perform();
+		}
+		
+		public void switchToWindow(WebDriver driver, String expWind)
+		{
+			Set<String> window = driver.getWindowHandles();
+			Iterator<String> it = window.iterator();
+			while(it.hasNext())
+			{
+				String win = it.next();
+				String currentTitle = driver.switchTo().window(win).getTitle();
+				
+				if(currentTitle.contains(expWind))
+				{
+					break;
+				}
+					
+			}
+		}
+		
+		public Robot robotObj() throws AWTException
+		{
+			Robot rb= new Robot();
+			return rb;
+		}
+			/**
+			 * This method will Press Enter Key
+			 * @param driver
+			 */
+			public void enterKey() throws Throwable
+			{
+				robotObj().keyPress(KeyEvent.VK_ENTER);
+			}
+			
+			/** 
+			 * This method is used to release the key
+			 * @param driver
+			 * @throws Throwable
+			 */
+			public void enterRelease() throws Throwable
+			{
+				robotObj().keyRelease(KeyEvent.VK_ENTER);
+			}
+			
+			/**
+			 * This method will switch the frame based on index
+			 * @param driver
+			 * @param index
+			 */
+			public void switchToFrame(WebDriver driver, int index)
+			{
+				driver.switchTo().frame(index);
+			}
+			
+			/**
+			 * This method will switch the frame based on nameOrID
+			 * @param driver
+			 * @param nameOrID
+			 */
+			public void switchToFrame(WebDriver driver, String nameOrID)
+			{
+				driver.switchTo().frame(nameOrID);
+			}
+			
+			/**
+			 * This method will switch the frame based on address
+			 * @param driver
+			 * @param address
+			 */
+			public void switchToFrame(WebDriver driver, WebElement address)
+			{
+				driver.switchTo().frame(address);
+			}
+			
+			
+			/**
+			 * This method is used to accept alert popup
+			 * @param driver
+			 */
+			public void acceptAlert(WebDriver driver)
+			{
+				driver.switchTo().alert().accept();
+			}
+			
+			
+			/**
+			 * This method is used to cancel alert popup
+			 * @param driver
+			 */
+			public void cancelAlert(WebDriver driver)
+			{
+				driver.switchTo().alert().dismiss();
+			}
+			
+		
+			/**
+			 * This method will take screenshot and store it in folder called as screenshot
+			 * @param driver
+			 * @param screenShotName
+			 * @return
+			 * @throws Throwable
+			 */
+			public String getScreenShot(WebDriver driver, String screenShotName) throws Throwable
+				{
+		
+					TakesScreenshot ts = (TakesScreenshot) driver;
+					File src = ts.getScreenshotAs(OutputType.FILE);
+					String path = "./screenshot/"+screenShotName+".png";
+					File dst = new File(path);
+					String scrpath = dst.getAbsolutePath();
+					FileUtils.copyFile(src, dst);
+					return scrpath;
+					
+				}
+			
+			/**
+			 * This method will perform random scroll
+			 * @param driver
+			 */
+			public void scrollBarAction(WebDriver driver)
+			{
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("window.scrollBy(0,800)","");
+			}
+			
+			
+			/**
+			 * This method will scroll until specified element is found
+			 * @param driver
+			 * @param element
+			 */
+			public void scrollAction(WebDriver driver, WebElement element)
+			{
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				int y = element.getLocation().getY();
+				jse.executeScript("window.scrollBy(0,"+y+")", element);
+			}
+			
+			/**
+			 * scrollDown till the bottom of the page
+			 * @param driver
+			 */
+			public void scrollDownTillBottomOfThePage(WebDriver driver)
+			{
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("window.scrollBy(0,document.body.scrollHeight)");
+			}
+		
+			/**
+			 *scroll Till Element To Be Visisble
+			 * @param driver
+			 * @param element
+			 */
+			
+			public void scrollTillEleToBeVisisble(WebDriver driver, WebElement element)
+			{
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("arguments[0].scrollIntoView()",element);
+			}
+			
+			public void clickOnElement(WebDriver driver, WebElement element)
+			{
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("arguments[0].click()", element);
+			}
+			
+			public void jseUsingSendKeys(WebDriver driver, WebElement element, String expData)
+			{
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				jse.executeScript("arguments[0].value=arguments[1]", element, expData);
+			}
+			
+			public void scrollUpTillElementToBeVisisble(WebDriver driver, WebElement element)
+			{
+				JavascriptExecutor jse = (JavascriptExecutor) driver;
+				Point loc = element.getLocation();
+				int x = loc.getX();
+				int y = loc.getY();
+				jse.executeScript("window.scrollBy("+x+","+y+")");
+			}
+			
+			
+	}
+	
+	
+	=================================================================================================================================================================================
+	
+	
+	package Contacts_Module;
+
+import java.io.FileInputStream;
+import java.time.Duration;
+import java.util.Iterator;
+import java.util.Properties;
+import java.util.Random;
+import java.util.Set;
+
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.support.ui.Select;
+
+public class CreateContactUsingOrgNameTest {
+
+	public static void main(String[] args) throws Throwable {
+		
+		WebDriver driver = null;
+		
+		Random ran = new Random();
+		int random = ran.nextInt(500);
+		
+		FileInputStream fis = new FileInputStream(".\\src\\test\\resources\\CommonData.properties");
+		Properties pObj = new Properties();
+		pObj.load(fis);
+		
+		//Get data from property file
+		String BROWSER = pObj.getProperty("browser");
+		String URL = pObj.getProperty("url");
+		String USERNAME = pObj.getProperty("username");
+		String PASSWORD = pObj.getProperty("password");
+		
+		//get data from Testdata
+		FileInputStream fi = new FileInputStream(".\\src\\test\\resources\\TestData55.xlsx");
+		Workbook wb = WorkbookFactory.create(fi);
+		Sheet sh = wb.getSheet("Organization");
+		
+		//get Org data from excel
+		String OrgName = sh.getRow(0).getCell(1).getStringCellValue()+random;
+		String Website = sh.getRow(1).getCell(1).getStringCellValue();
+		String Symbol = sh.getRow(2).getCell(1).getStringCellValue();
+		String PhoneNo = sh.getRow(3).getCell(1).getStringCellValue();
+		String IndDD = sh.getRow(1).getCell(3).getStringCellValue();
+		String TypeDD = sh.getRow(1).getCell(4).getStringCellValue();
+		
+		//get Contacts data from excel
+		String lastName = wb.getSheet("Contacts").getRow(0).getCell(1).getStringCellValue();
+		String title = wb.getSheet("Contacts").getRow(1).getCell(1).getStringCellValue();
+		String dept = wb.getSheet("Contacts").getRow(2).getCell(1).getStringCellValue();
+		String email = wb.getSheet("Contacts").getRow(3).getCell(1).getStringCellValue();
+		String leadSource = wb.getSheet("Contacts").getRow(1).getCell(3).getStringCellValue();
+		
+		//Launch browser
+		if(BROWSER.equalsIgnoreCase("chrome"))
+		{
+			driver = new ChromeDriver();
+		}
+		else if(BROWSER.equalsIgnoreCase("firefox"))
+		{
+			driver = new FirefoxDriver();
+		}
+		else
+		{
+			System.out.println("-- invalid browser --");
+		}
+		
+		//maximize window
+		driver.manage().window().maximize();
+				
+		//Enter URL
+		driver.get(URL);
+				
+		//wait for page load
+		driver.manage().timeouts().pageLoadTimeout(Duration.ofSeconds(20));
+		
+		//Login To App
+		driver.findElement(By.name("user_name")).sendKeys(USERNAME);
+		driver.findElement(By.name("user_password")).sendKeys(PASSWORD);
+		driver.findElement(By.id("submitButton")).click();
+	
+	//click on Organization link
+	driver.findElement(By.linkText("Organizations")).click();
+	
+	//click on CreateOrgLookUp Img
+	driver.findElement(By.xpath("//img[@title='Create Organization...']")).click();
+	
+	//Enter all the fields
+	driver.findElement(By.name("accountname")).sendKeys(OrgName);
+	driver.findElement(By.name("website")).sendKeys(Website);
+	driver.findElement(By.name("tickersymbol")).sendKeys(Symbol);
+	driver.findElement(By.name("phone")).sendKeys(PhoneNo);
+	
+	WebElement induDDEle = driver.findElement(By.xpath("//select[@name='industry']"));
+	WebElement typeDDEle = driver.findElement(By.xpath("//select[@name='accounttype']"));
+	
+	//handle industry dropdown
+	Select sel = new Select(induDDEle);
+	sel.selectByVisibleText(IndDD);
+	
+	//handle Type dropdown
+	Select se = new Select(typeDDEle);
+	se.selectByVisibleText(TypeDD);
+	
+	driver.findElement(By.xpath("//input[@title='Save [Alt+S]']")).click();
+	Thread.sleep(3000);
+	
+	
+	System.out.println(" -- Organization created successfully --");
+	
+	//navigate to contact link
+	driver.findElement(By.linkText("Contacts")).click();
+			
+	//click on CreateContactLookupImg
+	driver.findElement(By.xpath("//img[@title='Create Contact...']")).click();
+			
+	//Enter all the fields with valid data
+	driver.findElement(By.name("lastname")).sendKeys(lastName);
+	
+	driver.findElement(By.xpath("//img[@src='themes/softed/images/select.gif']")).click();
+	
+	//switch from parent to child window
+	Set<String> Window = driver.getWindowHandles();
+	Iterator<String> it = Window.iterator();
+	while(it.hasNext())
+	{
+		String win = it.next();
+		String chilWin = driver.switchTo().window(win).getTitle();
+		if(chilWin.contains("Accounts&action"))
+		{
+			break;
+		}
+	}
+	
+	//search for existing Org and click
+	driver.findElement(By.xpath("//input[@name='search_text']")).sendKeys(OrgName);
+	driver.findElement(By.id("search_txt")).click();
+	driver.findElement(By.xpath("//a[text()='"+OrgName+"']")).click();
+	
+	//switch from child to parent window
+	Set<String> Wind = driver.getWindowHandles();
+	Iterator<String> i = Wind.iterator();
+	while(i.hasNext())
+	{
+		String wi = i.next();
+		String parWin = driver.switchTo().window(wi).getTitle();
+		if(parWin.contains("Contacts&action"))
+		{
+			break;
+		}
+	}
+	
+	
+	driver.findElement(By.name("title")).sendKeys(title);
+	driver.findElement(By.name("department")).sendKeys(dept);
+	driver.findElement(By.name("email")).sendKeys(email);
+	WebElement LeadSourceDD = driver.findElement(By.xpath("//select[@name='leadsource']"));
+	
+	//handle leadsource droppdown
+	Select s = new Select(LeadSourceDD);
+	s.selectByVisibleText(leadSource);
+	
+	driver.findElement(By.xpath("//input[@title='Save [Alt+S]']")).click();
+		System.out.println("-- Contacts Created --");
+	
+		//SignOut from appl
+		driver.findElement(By.xpath("//img[@src='themes/softed/images/user.PNG']")).click();
+	
+		WebElement signout = driver.findElement(By.linkText("Sign Out"));
+	
+		Actions act = new Actions(driver);
+		act.click(signout).perform();
+		
+		driver.quit();
+	
+	}
+	
+}
+
+=====================================================================================================================================================================================
+	
+	

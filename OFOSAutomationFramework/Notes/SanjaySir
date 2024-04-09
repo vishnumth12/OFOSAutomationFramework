@@ -1,0 +1,168 @@
+//******************************************************Loginpage POM class ***************************************************************
+package com.comcast.VtigerObjectRepsitory;
+
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindAll;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.FindBys;
+import org.openqa.selenium.support.PageFactory;
+
+public class LoginPage {
+//Declaration
+	
+	@FindBy(name = "user_name")private WebElement usernameEdtTxt;
+	
+	@FindBys(@FindBy(name = "user_password"))
+	private WebElement passwordEdtTxt;
+	
+	@FindAll({@FindBy(id = "submitButton"),@FindBy(xpath = "//input[@value='Login']")})
+	private WebElement LoginBtnClk;
+	
+	//Initialization
+	public LoginPage(WebDriver driver)
+	{
+		PageFactory.initElements(driver,this);
+	}
+	
+	//Utilization
+	public WebElement getusernameEdtTxt()
+	{
+		return usernameEdtTxt;
+	}
+
+	public WebElement getPasswordEdtTxt() 
+	{
+		return passwordEdtTxt;
+	}
+
+	public WebElement getLoginBtnClk() 
+	{
+		return LoginBtnClk;
+	}
+	
+	//Business libraries
+	/**
+	 * login to application with username and password and click on save btn
+	 * @param username
+	 * @param password
+	 */
+	public void loginToApp(String username,String password)
+	{
+		usernameEdtTxt.sendKeys(username);
+		passwordEdtTxt.sendKeys(password);
+		LoginBtnClk.click();
+	}
+  
+  --------------------------------------------test script-----------------------------------------------------
+  package com.comcastcrm.contacttest;
+
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.time.Duration;
+import java.util.Properties;
+import java.util.Random;
+
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.WorkbookFactory;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.interactions.Actions;
+import org.testng.annotations.Test;
+
+import com.comcast.VtigerObjectRepsitory.ContactsPage;
+import com.comcast.VtigerObjectRepsitory.CreateContactPage;
+import com.comcast.VtigerObjectRepsitory.HomePage;
+import com.comcast.VtigerObjectRepsitory.LoginPage;
+import com.comcast.VtigerObjectRepsitory.VerifyContactPage;
+import com.comcast.genericutlity.ExcelUtlity;
+import com.comcast.genericutlity.FileUtlity;
+import com.comcast.genericutlity.JavaUtlity;
+import com.comcast.genericutlity.WebActionUtility;
+
+
+
+public class CreateContactTest {
+	
+	@Test
+	public void createOrgTest() throws Throwable{		
+		/*create Object for utlity */
+		FileUtlity fLib = new FileUtlity();
+		ExcelUtlity eLib = new ExcelUtlity();
+		JavaUtlity jLib = new JavaUtlity();
+		WebActionUtility wLib = new WebActionUtility();
+
+		
+		/*get the FILE PATH*/
+       String ENV_FILE_PATH =    fLib.getFilePathFromPropertiesFile("projectConfigDataFilePath");
+       String TEST_SCRIPT_EXCEL_FILE_PATH =    fLib.getFilePathFromPropertiesFile("testScriptdatafilePath");
+       
+       /*Read the common data*/
+	   String BROWSER = fLib.getDataFromProperties(ENV_FILE_PATH, "browser");
+	   String URL = fLib.getDataFromProperties(ENV_FILE_PATH, "url");
+	   String USERNAME = fLib.getDataFromProperties(ENV_FILE_PATH, "username");
+	   String PASSWORd = fLib.getDataFromProperties(ENV_FILE_PATH, "password");
+
+		/*test script data*/
+	   int randomNum = jLib.getRandomNumber();
+
+		  String lastName = eLib.getDataFromExcelBasedTestId(TEST_SCRIPT_EXCEL_FILE_PATH, "contact", "tc_04", "LastName") +"_"+ randomNum;
+
+
+	
+		WebDriver driver = null;
+
+		/*step 1 : login to app*/
+		if(BROWSER.equalsIgnoreCase("chrome")) {		
+		    driver = new ChromeDriver();
+		}else if(BROWSER.equalsIgnoreCase("firefox")) {
+			driver = new FirefoxDriver();
+		}else if(BROWSER.equalsIgnoreCase("edge")) {
+			driver = new EdgeDriver();
+		}else {
+		    driver = new ChromeDriver();
+		}
+		
+		
+		wLib.waitForElementInDOM(driver);
+		
+		driver.get(URL);
+		LoginPage loginPage = new LoginPage(driver);
+		loginPage.loginToApp(USERNAME, PASSWORd);
+		
+		/*step 2 : navigate to contacts page*/
+		HomePage homePage = new HomePage(driver);
+		homePage.clickOnContactsLnk();
+		
+		/*step 3 :  navigate to create cnct page*/
+		ContactsPage contactsPage = new ContactsPage(driver);
+		contactsPage.getCreateCntctLookUpImg().click();
+		
+		/*step 4 :  create a new contact*/
+		CreateContactPage createContactPage = new CreateContactPage(driver);
+		createContactPage.createContact("tyss", lastName);
+		
+		 /*verify expected result*/
+		VerifyContactPage verifyContactPage = new VerifyContactPage(driver);
+		String actLastName=verifyContactPage.getContactName().getText();
+		//String actLastName = driver.findElement(By.className("dvHeaderText")).getText();
+         if(actLastName.contains(lastName)) {
+        	 System.out.println(lastName+ "is verified PASS");
+         }else {
+        	 System.out.println(lastName+ "is not verified FAIL");
+         }
+		/*step 4 :  logout*/
+         homePage.logoutFromApp(wLib, driver);
+	}
+
+}
+
+
+}

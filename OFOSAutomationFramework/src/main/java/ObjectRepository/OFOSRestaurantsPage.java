@@ -1,0 +1,32 @@
+package ObjectRepository;
+
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.PageFactory;
+
+public class OFOSRestaurantsPage {
+
+	//Declaration
+	@FindBy(linkText = "Eataly")
+	private WebElement restaurantNameTextLink;
+	
+	//Initialization
+	public OFOSRestaurantsPage(WebDriver driver) {
+		PageFactory.initElements(driver, this);
+	}
+
+	//utilization
+	public WebElement getRestaurantNameTextLink() {
+		return restaurantNameTextLink;
+	}
+	
+	//Busines library
+	public void navToRestaurantMenuPage() {
+		restaurantNameTextLink.click();
+		
+	}
+	
+	}
+
