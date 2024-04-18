@@ -3,11 +3,11 @@
 <suite name="Failed suite [Default suite]" guice-stage="DEVELOPMENT">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="AdminModule.AddNewRestaurantCategoryTest">
+      <class name="UserModule.UserRegistrationTest">
         <methods>
-          <include name="addRestaurantCategory"/>
+          <include name="newUserRegistrationWithValidCredentials"/>
         </methods>
-      </class> <!-- AdminModule.AddNewRestaurantCategoryTest -->
+      </class> <!-- UserModule.UserRegistrationTest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->

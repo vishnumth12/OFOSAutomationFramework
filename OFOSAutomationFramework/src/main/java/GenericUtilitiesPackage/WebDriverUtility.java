@@ -267,6 +267,15 @@ public class WebDriverUtility {
 	public void rightClick(WebDriver driver, WebElement ele) {
 		createActionObject(driver).contextClick(ele).perform();
 	}
+	
+	/**
+	 * this method will move to element and click on it
+	 * @param driver
+	 * @param ele
+	 */
+	public void clickAction(WebDriver driver, WebElement ele) {
+		createActionObject(driver).moveToElement(ele).click().perform();
+	}
 
 	/**
 	 * this method is used to switch the control to child window
@@ -323,8 +332,8 @@ public class WebDriverUtility {
 	public String getScreenshot(WebDriver driver, String screenShotName) throws IOException {
 		TakesScreenshot ts = (TakesScreenshot) driver;
 		File src = ts.getScreenshotAs(OutputType.FILE);
-		String path = ".\\Screenshots"+screenShotName+".png";
-		File dest = new File("path");
+		String path = ".\\Screenshots\\"+screenShotName+".png";
+		File dest = new File(path);
 		FileUtils.copyFile(src, dest);
 		return dest.getAbsolutePath();
 	}

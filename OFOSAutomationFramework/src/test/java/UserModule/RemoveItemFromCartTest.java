@@ -1,6 +1,9 @@
 package UserModule;
 
 import java.io.IOException;
+
+import org.testng.Assert;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import GenericUtilitiesPackage.BaseClass;
@@ -8,6 +11,7 @@ import ObjectRepository.OFOSHomePage;
 import ObjectRepository.OFOSRestaurantMenuPage;
 import ObjectRepository.OFOSRestaurantsPage;
 
+@Listeners(GenericUtilitiesPackage.ListenerImplementationClass.class)
 public class RemoveItemFromCartTest extends BaseClass{
 	
 	@Test
@@ -20,7 +24,7 @@ public class RemoveItemFromCartTest extends BaseClass{
 		rp.getRestaurantNameTextLink().click();
 		
 		String quantity = eUtil.readSingleDataFromExcelFile("OrdersModule", 4, 2);
-		
+	
 		OFOSRestaurantMenuPage rmp = new OFOSRestaurantMenuPage(driver);
 		rmp.selectQuantityAndAddProductToCart(quantity);
 		

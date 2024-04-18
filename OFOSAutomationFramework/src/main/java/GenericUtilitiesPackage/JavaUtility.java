@@ -38,7 +38,7 @@ public class JavaUtility {
 	 */
 	public String getSystemDateInFormat() {
 		
-		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd-HH-mm-ss");
+		SimpleDateFormat sdf = new SimpleDateFormat("(yyyy-MM-dd)(HH-mm-ss)");
 		Date d = new Date();
 		String syDateFormat = sdf.format(d);
 		return syDateFormat;

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite thread-count="5" parallel="methods" name="Suite">
+	
+	<groups>
+		<run>
+			<include name="smoke"></include>
+			<include name="regression"></include>
+		</run>
+	</groups>
+	
+  <test thread-count="5" parallel="methods" name="Test-runner-1">
+    <classes>
+      <class name="UserModule.OneTest">
+      <!--	<methods>
+			<exclude name="testCase1"> </exclude>
+		</methods> -->
+		<methods>
+			<include name="testCase2"></include>
+		</methods>
+      </class>
+      <class name="UserModule.TwoTest">
+		<methods>
+			<include name="testScript5"></include>
+		</methods>
+      </class>
+    </classes>
+  </test> <!-- Test -->
+  
+</suite> <!-- Suite -->

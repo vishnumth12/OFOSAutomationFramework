@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite parallel="tests" name="Suite">
+  <test thread-count="5" parallel="tests" name="Test-Runner-1">
+    <classes>
+      <class name="UserModule.AddItemToCartTest"/>
+      <class name="UserModule.LoginToApplicationTest"/>
+      <class name="UserModule.CancelOrderTest"/>
+      <class name="UserModule.RemoveItemFromCartTest"/>
+    </classes>
+  </test> <!-- Test -->
+  
+   <test thread-count="5" parallel="tests" name="Test-Runner-2">
+    <classes>
+      <class name="UserModule.AddItemToCartTest"/>
+      <class name="UserModule.LoginToApplicationTest"/>
+      <class name="UserModule.CancelOrderTest"/>
+      <class name="UserModule.RemoveItemFromCartTest"/>
+    </classes>
+  </test> <!-- Test -->
+  
+</suite> <!-- Suite -->
