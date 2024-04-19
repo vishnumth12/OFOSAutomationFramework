@@ -4,7 +4,7 @@ import org.testng.annotations.Test;
 
 import GenericUtilitiesPackage.BaseClass;
 
-public class OneTest extends BaseClass{
+public class OneTest{
 
 	
 	@Test(groups = "smoke")
